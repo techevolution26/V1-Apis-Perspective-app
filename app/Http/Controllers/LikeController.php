@@ -3,20 +3,34 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Like;
 
 class LikeController extends Controller
 {
-    // Like a perception
     public function store(Request $request, $id)
     {
-        $like = $request->user()->likes()->firstOrCreate([ 'perception_id' => $id ]);
-        return response()->json($like, 201);
+        $user = $request->user();
+        $user->likes()->firstOrCreate(['perception_id' => $id]);
+
+        // total likes on that perception:
+        $count = Like::where('perception_id', $id)->count();
+
+        return response()->json([
+            'liked'       => true,
+            'likes_count' => $count,
+        ], 200);
     }
 
-    // Unlike a perception
     public function destroy(Request $request, $id)
     {
-        $request->user()->likes()->where('perception_id', $id)->delete();
-        return response()->json(['message' => 'Unliked']);
+        $user = $request->user();
+        $user->likes()->where('perception_id', $id)->delete();
+
+        $count = Like::where('perception_id', $id)->count();
+
+        return response()->json([
+            'liked'       => false,
+            'likes_count' => $count,
+        ], 200);
     }
 }

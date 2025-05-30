@@ -56,9 +56,15 @@ class PerceptionController extends Controller
 
 
     // Show a specific perception
-    public function show($id)
+     public function show($id)
     {
-        $perception = Perception::with('user', 'topic')->findOrFail($id);
+        $perception = Perception::with([
+            'user:id,name,avatar_url',
+            'topic:id,name',
+            'comments.user:id,name,avatar_url'  // if you eager‐load comments
+        ])->withCount(['likes','comments'])
+          ->findOrFail($id);
+
         return response()->json($perception);
     }
 

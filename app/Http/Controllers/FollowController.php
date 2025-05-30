@@ -12,17 +12,25 @@ class FollowController extends Controller
     public function follow(Request $request, $id)
     {
         if ($request->user()->id == $id) {
-            return response()->json(['message' => 'Cannot follow yourself'], 400);
+            return response()->json(['error' => 'You cannot follow yourself'], 400);
         }
-        $request->user()->following()->attach($id);
-        return response()->json(['message' => 'Followed']);
+
+        $other = User::findOrFail($id);
+
+        // detach first to avoid duplicate‐key errors
+        $request->user()->following()->detach($other->id);
+        $request->user()->following()->attach($other->id);
+
+        return response()->json(['message' => 'Now following user ' . $id], 200);
     }
 
     // Unfollowing a user
     public function unfollow(Request $request, $id)
     {
-        $request->user()->following()->detach($id);
-        return response()->json(['message' => 'Unfollowed']);
+        $other = User::findOrFail($id);
+        $request->user()->following()->detach($other->id);
+
+        return response()->json(['message' => 'Unfollowed user ' . $id], 200);
     }
 
     // Listing followers of a user

@@ -12,6 +12,7 @@ use App\Http\Controllers\TopicController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CommentReplyController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -43,7 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users/{id}',  [UserController::class, 'showPublic']);
     Route::get('/users/{id}/followers', [FollowController::class, 'followers']);
     Route::get('/users/{id}/following', [FollowController::class, 'following']);
-      Route::post('/user/profile', [ProfileController::class,'updateProfile']);
+    Route::post('/user/profile', [ProfileController::class, 'updateProfile']);
 
     // Follow / Unfollow
     Route::post('/users/{id}/follow',   [FollowController::class, 'follow']);
@@ -52,15 +53,15 @@ Route::middleware('auth:sanctum')->group(function () {
     // Perceptions (tweets)
     Route::get('/perceptions',  [PerceptionController::class, 'index']);
     Route::post('/perceptions', [PerceptionController::class, 'store']);
+
     // Route::get('/perceptions/{id}',  [PerceptionController::class, 'show']);
     Route::put('/perceptions/{id}',  [PerceptionController::class, 'update']);
     Route::delete('/perceptions/{id}',  [PerceptionController::class, 'destroy']);
 
     // Comments
-    Route::get('/perceptions/{id}/comments', [CommentController::class, 'index']);
-
     Route::post('/perceptions/{id}/comments', [CommentController::class, 'store']);
-
+    // Route::post('/perceptions/{perception}/comments', [CommentController::class,'store']);
+    // Route::get('/perceptions/{id}/comments', [CommentController::class, 'index']);
 
     // Likes
     Route::post('/perceptions/{id}/like',   [LikeController::class, 'store']);
@@ -74,6 +75,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // Notifications
     Route::get('/notifications',    [NotificationController::class, 'index']);
     Route::put('/notifications/{id}/read',  [NotificationController::class, 'markRead']);
+
+    // Comment Replies
+    Route::post('/comments/{comment}/replies', [CommentReplyController::class, 'store']);
 });
 
 
@@ -82,6 +86,8 @@ Route::get('/topics', [TopicController::class, 'index']);
 Route::get('/topics/{id}',  [TopicController::class, 'show']);
 Route::get('/perceptions/{id}', [PerceptionController::class, 'show']);
 Route::get('/users/{id}', [ProfileController::class, 'show']);
+Route::get('/perceptions/{id}/comments', [CommentController::class, 'index']);
 Route::get('/users/{id}/perceptions', [ProfileController::class, 'perceptions']);
 Route::get('/users/{id}/followers', [FollowController::class, 'followers']);
 Route::get('/users/{id}/following', [FollowController::class, 'following']);
+Route::get('/comments/{comment}/replies', [CommentReplyController::class,'index']);

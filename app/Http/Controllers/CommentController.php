@@ -9,40 +9,40 @@ use Illuminate\Http\Request;
 class CommentController extends Controller
 {
     // GET /api/perceptions/{id}/comments
-    public function index($id)
+    public function index($perceptionId)
     {
-        $perception = Perception::findOrFail($id);
-        $comments = $perception
-            ->comments()
-            ->with('user:id,name')
-            ->orderBy('created_at', 'asc')
+
+        $comments = Comment::with(['user', 'replies'])   // eager‐load top‐level replies (and theirs)
+            ->where('perception_id', $perceptionId)
+            ->whereNull('parent_comment_id')            // only roots
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return response()->json($comments);
     }
 
     // POST /api/perceptions/{id}/comments
-    public function store(Request $request, $id)
+    public function store(Request $request, $perceptionId)
     {
-        $request->validate([
-            'body' => 'required|string|max:1000',
+        $data = $request->validate([
+            'body'           => 'required_without:media|string',
+            'media'          => 'nullable|file|mimes:jpeg,png,gif,mp4,webm|max:10240',
+            'parent_comment_id' => 'nullable|exists:comments,id',
         ]);
 
-        $perception = Perception::findOrFail($id);
+        if ($file = $request->file('media')) {
+            $path = $file->store('comments_media', 'public');
+            $data['media_url'] = url("storage/$path");
+        }
 
-        $comment = $perception->comments()->create([
-            'user_id' => $request->user()->id,
-            'body'    => $request->body,
+        $comment = Comment::create([
+            'user_id'           => $request->user()->id,
+            'perception_id'     => $perceptionId,
+            'parent_comment_id' => $data['parent_comment_id'] ?? null,
+            'body'              => $data['body'] ?? null,
+            'media_url'         => $data['media_url'] ?? null,
         ]);
 
-        // $comment = new Comment(['body' => $request ->body]);
-        // $comment->user()->associate($request->user());
-        // $comment->perception()->associate($perception);
-        // $comment->save();
-
-        // load the user relationship
-        $comment->load('user:id,name');
-
-        return response()->json($comment, 201);
+        return response()->json($comment->load('user'), 201);
     }
 }
