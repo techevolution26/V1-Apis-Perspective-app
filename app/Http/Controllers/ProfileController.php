@@ -16,7 +16,6 @@ class ProfileController extends Controller
         $data = $r->validate([
             'profession'  => 'nullable|string|max:255',
             'bio'         => 'nullable|string|max:1000',
-            'avatar'      => 'nullable|image|max:8192',
         ]);
 
         // handling avatar upload
@@ -58,5 +57,12 @@ class ProfileController extends Controller
             ->get();
 
         return response()->json($perceptions);
+    }
+    public function topics($id)
+    {
+        $user = User::findOrFail($id);
+        return response()->json(
+            $user->followedTopics()->select('topics.id', 'topics.name', 'topics.description', 'topics.image_url')->get()
+        );
     }
 }

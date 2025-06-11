@@ -11,7 +11,7 @@ class TopicController extends Controller
 
     public function index()
     {
-        $topics = \App\Models\Topic::select('id', 'name', 'description')->get();
+        $topics = \App\Models\Topic::select('id', 'name', 'description', 'image_url')->get();
 
         return response()->json([
             'topics' => $topics

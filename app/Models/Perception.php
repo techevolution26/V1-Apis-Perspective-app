@@ -9,7 +9,7 @@ use App\Models\Comment;
 
 class Perception extends Model
 {
-    protected $fillable = ['user_id', 'body', 'media_url', 'topic_id'];
+    protected $fillable = ['user_id', 'body', 'topic_id', 'media_url'];
 
     public function user()
     {

@@ -26,7 +26,7 @@ class PerceptionController extends Controller
     }
 
 
-    // Store a new perception
+    // Storing a new perception
     public function store(Request $request)
     {
         $request->validate([
@@ -56,14 +56,14 @@ class PerceptionController extends Controller
 
 
     // Show a specific perception
-     public function show($id)
+    public function show($id)
     {
         $perception = Perception::with([
             'user:id,name,avatar_url',
             'topic:id,name',
             'comments.user:id,name,avatar_url'  // if you eager‐load comments
-        ])->withCount(['likes','comments'])
-          ->findOrFail($id);
+        ])->withCount(['likes', 'comments'])
+            ->findOrFail($id);
 
         return response()->json($perception);
     }
@@ -84,23 +84,42 @@ class PerceptionController extends Controller
     // Update own perception
     public function update(Request $request, $id)
     {
-        $perception = Perception::where('user_id', $request->user()->id)->findOrFail($id);
+        $perception = Perception::where('user_id', $request->user()->id)
+            ->findOrFail($id);
 
+        // validate everything, including an optional file upload
         $data = $request->validate([
             'body'     => 'sometimes|string|max:280',
             'topic_id' => 'sometimes|exists:topics,id',
+            'media'    => 'nullable|file|mimes:jpg,jpeg,png,mp4,webm|max:10240',
         ]);
 
-        $perception->update($data);
+        // mass‑assign the simple fields
+        $perception->fill($data);
+
+        // then handle file (if any)
+        if ($request->hasFile('media')) {
+            // delete old file …
+            $path = $request->file('media')->store('perceptions', 'public');
+            $perception->media_url = url(Storage::url($path));
+        }
+
+        $perception->save();
+
+        // reload relations + counts
+        $perception->load('user:id,name,avatar_url', 'topic:id,name')
+            ->loadCount(['likes', 'comments']);
+
         return response()->json($perception);
     }
+
 
     // Delete own perception
     public function destroy(Request $request, $id)
     {
-        $perception = Perception::where('user_id', $request->user()->id)->findOrFail($id);
+        $perception = Perception::where('user_id', $request->user()->id)
+            ->findOrFail($id);
         $perception->delete();
-
-        return response()->json(['message' => 'Deleted']);
+        return response()->json(['message' => 'Deleted'], 200);
     }
 }

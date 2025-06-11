@@ -48,6 +48,12 @@ class User extends Authenticatable
         return $this->hasMany(Like::class);
     }
 
+    public function followedTopics()
+    {
+        return $this->belongsToMany(Topic::class, 'topic_follows')
+            ->withTimestamps();
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

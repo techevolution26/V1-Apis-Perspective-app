@@ -13,6 +13,8 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CommentReplyController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\TopicFollowController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -39,6 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Current user profile
     Route::get('/user',  [UserController::class, 'show']);
     Route::put('/user',  [UserController::class, 'update']);
+    Route::get('/users/{id}/topics',    [ProfileController::class, 'topics']);
 
     // Users (public profiles)
     Route::get('/users/{id}',  [UserController::class, 'showPublic']);
@@ -71,6 +74,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Route::get('/topics',  [TopicController::class, 'index']);
     // Route::get('/topics/{id}',  [TopicController::class, 'show']);
     Route::get('/topics/{id}/perceptions', [PerceptionController::class, 'byTopic']);
+    Route::post('/topics/{id}/follow',   [TopicFollowController::class, 'follow']);
+    Route::delete('/topics/{id}/follow',   [TopicFollowController::class, 'unfollow']);
 
     // Notifications
     Route::get('/notifications',    [NotificationController::class, 'index']);
@@ -78,6 +83,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Comment Replies
     Route::post('/comments/{comment}/replies', [CommentReplyController::class, 'store']);
+    // Route::get('/search', [SearchController::class, 'search']);
 });
 
 
@@ -90,4 +96,5 @@ Route::get('/perceptions/{id}/comments', [CommentController::class, 'index']);
 Route::get('/users/{id}/perceptions', [ProfileController::class, 'perceptions']);
 Route::get('/users/{id}/followers', [FollowController::class, 'followers']);
 Route::get('/users/{id}/following', [FollowController::class, 'following']);
-Route::get('/comments/{comment}/replies', [CommentReplyController::class,'index']);
+Route::get('/comments/{comment}/replies', [CommentReplyController::class, 'index']);
+Route::get('/search', [SearchController::class, 'search']);
