@@ -33,4 +33,15 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         return response()->json($user);
     }
+    // Search for users by name or email or profession
+    public function searchUsers(Request $request)
+    {
+        $query = $request->input('query');
+        $users = User::where('name', 'like', "%{$query}%")
+            ->orWhere('email', 'like', "%{$query}%")
+            ->orWhere('profession', 'like', "%{$query}%")
+            ->get();
+
+        return response()->json($users);
+    }
 }

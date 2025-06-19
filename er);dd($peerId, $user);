@@ -1,0 +1,17 @@
+[90m= [39m[34;4mApp\Models\User[39;24m {#6025
+    [34mid[39m: [35m1[39m,
+    [34mname[39m: "[32mJohn Alfred[39m",
+    [34mavatar_url[39m: "[32m/storage/avatars/Lzc54h2zpjQkvmS3XfuEErppYVWCeWOtT7K3zfG2.jpg[39m",
+    [34mprofession[39m: "[32m@Solution-Architect | Web Dev | CyberSecurity[39m",
+    [34mbio[39m: """
+      [32mYou'll Never Walk Alone YNWA[39m\r\n
+      [32mPrograming[39m
+      """,
+    [34memail[39m: "[32mtechevo404@gmail.com[39m",
+    [34memail_verified_at[39m: [36mnull[39m,
+    #[33mpassword[39m: "[32m$2y$12$0Nh9.mAEtNDHzgAD7bPJbefINP0Bz0Ffkrc33JLsSI76IqT5UjoOq[39m",
+    #[33mremember_token[39m: [36mnull[39m,
+    [34mcreated_at[39m: "[32m2025-06-02 15:26:49[39m",
+    [34mupdated_at[39m: "[32m2025-06-13 09:11:01[39m",
+  }
+

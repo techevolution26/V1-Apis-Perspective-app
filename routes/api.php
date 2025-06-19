@@ -4,6 +4,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CommentReplyController;
+use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\NotificationController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\TopicFollowController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Broadcast;
 
 /*
  * |--------------------------------------------------------------------------
@@ -29,7 +31,8 @@ use Illuminate\Support\Facades\Route;
 
 // Public (no auth)
 // Route::get('/ping', fn () => 'pong');
-
+// Broadcasting routes (protected)
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -86,6 +89,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // Comment Replies
     Route::post('/comments/{comment}/replies', [CommentReplyController::class, 'store']);
     // Route::get('/search', [SearchController::class, 'search']);
+
+    Route::get('conversations', [ConversationController::class, 'index']);
+    Route::post('conversations', [ConversationController::class, 'store']);
+    Route::get('conversations/{peer}', [ConversationController::class, 'show']);
+    Route::post('conversations/{peer}', [ConversationController::class, 'sendMessage']);
 });
 
 // Public Routes(no auth)
@@ -99,3 +107,4 @@ Route::get('/users/{id}/followers', [FollowController::class, 'followers']);
 Route::get('/users/{id}/following', [FollowController::class, 'following']);
 Route::get('/comments/{comment}/replies', [CommentReplyController::class, 'index']);
 Route::get('/search', [SearchController::class, 'search']);
+Route::get('search-users', [UserController::class, 'searchUsers']);

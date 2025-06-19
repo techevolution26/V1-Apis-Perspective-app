@@ -35,6 +35,8 @@ return [
      * | application. If disabled, a simple generic error page is shown.
      * |
      */
+    // Default debug mode is true for development, false for production
+    // You can override this in your .env file with APP_DEBUG
     'debug' => (bool) env('APP_DEBUG', true),
 
     /*
@@ -109,4 +111,11 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+
+    // 'providers' => [
+    //     // … other framework providers …
+    //     Illuminate\Broadcasting\BroadcastServiceProvider::class,
+    //     App\Providers\BroadcastServiceProvider::class,
+    //     // … your other app providers …
+    // ],
 ];
