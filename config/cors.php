@@ -2,16 +2,24 @@
 
 return [
 
-    'paths' => [ 'api/*',
-    'broadcasting/auth',
-    'api/broadcasting/auth', //
-    'sanctum/csrf-cookie' ],
+    'paths' => [
+        'api/*',
+        'broadcasting/auth',
+        'api/broadcasting/auth',
+        'sanctum/csrf-cookie',
+    ],
 
     'allowed_methods' => [ '*' ],
 
-    'allowed_origins' => [ 'https://v1-frontend-persp-jq9orjad8-global-perception-app.vercel.app','http://localhost:3000', 'http://192.168.8.145:3000' ],
+    'allowed_origins' => [
+        'http://localhost:3000',
+        'http://192.168.8.145:3000',
+        'https://v1-frontend-persp.vercel.app',
+    ],
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => [
+        '^https:\/\/.*\.vercel\.app$',
+    ],
 
     'allowed_headers' => [ '*' ],
 
@@ -19,6 +27,5 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => false,
-
+    'supports_credentials' => true,
 ];
