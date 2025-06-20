@@ -14,9 +14,12 @@ class Kernel extends HttpKernel
      *
      * @var array
      */
+    // Add \Fruitcake\Cors\HandleCors::class to the global middleware stack if you are using the fruitcake/laravel-cors package.
+    // Place it in the $middleware array, typically before or after \Illuminate\Http\Middleware\HandleCors::class.
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
         // \App\Http\Middleware\TrustProxies::class,
+        // \Fruitcake\Cors\HandleCors::class,
         \Illuminate\Http\Middleware\HandleCors::class, // <-- This must be here
         // \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
