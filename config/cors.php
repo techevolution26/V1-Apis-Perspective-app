@@ -14,7 +14,7 @@ return [
     'allowed_origins' => [
         'http://localhost:3000',
         'http://192.168.8.145:3000',
-        'https://v1-frontend-persp.vercel.app',
+        'https://v1-frontend-persp.vercel.app','*',
     ],
 
     'allowed_origins_patterns' => [
