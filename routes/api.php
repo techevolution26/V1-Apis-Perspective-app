@@ -108,3 +108,7 @@ Route::get('/users/{id}/following', [FollowController::class, 'following']);
 Route::get('/comments/{comment}/replies', [CommentReplyController::class, 'index']);
 Route::get('/search', [SearchController::class, 'search']);
 Route::get('search-users', [UserController::class, 'searchUsers']);
+
+Route::get('/api/health', function () {
+    return response()->json(['status' => 'ok', 'time' => now()->toIso8601String()], 200);
+});
