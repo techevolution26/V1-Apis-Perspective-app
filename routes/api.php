@@ -109,6 +109,6 @@ Route::get('/comments/{comment}/replies', [CommentReplyController::class, 'index
 Route::get('/search', [SearchController::class, 'search']);
 Route::get('search-users', [UserController::class, 'searchUsers']);
 
-Route::get('/api/health', function () {
+Route::get('/health', function () {
     return response()->json(['status' => 'ok', 'time' => now()->toIso8601String()], 200);
 });
